@@ -54,6 +54,10 @@ boxplot(ds$TAT, ylab = "TAT", horizontal = TRUE);boxplot(ds$TEY, ylab = "TEY", h
 boxplot(ds$CO, ylab = "CO", horizontal = TRUE);boxplot(ds$NOX, ylab = "NOX", horizontal = TRUE)
 
 #### ---- Correlation Matrix ---- ####
+# Si osserva la preseza di legami, anche forti tra i predittori stessi, e tra predittori e risposta
+# In particolare, come era intuibile, le due risposte sono legate a fattori meccanici della turbina
+# e non a quelli ambientali. 
+#Intuizione: I regressori relativi a variabili ambientali possono introdurre solo rumore
 library(corrplot)
 library(RColorBrewer)
 cor <-cor(ds)
