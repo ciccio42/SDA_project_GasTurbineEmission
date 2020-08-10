@@ -10,13 +10,14 @@ ds = rbind(ds, ds3)
 ds = rbind(ds, ds4)
 ds = rbind(ds, ds5)
 
+attach(ds)
 #### --- Features list ---- ####
 # Predictors: 
 # AT -> Ambient Temperature [°C]
 # AP -> Ambient Pressure [mbar]
 # AH -> Ambient Humidity [%]
 # AFDP -> Air filter difference pressure [mbar]
-# GTEP -> Gas turbine exhaust pressure [°C]
+# GTEP -> Gas turbine exhaust pressure [mbar]
 # TIT -> Turbine inlet temperature [°C]
 # TAT -> Turbine after temperature [°C]
 # CDP -> Compressor discharge pressure [mbar]
@@ -54,10 +55,14 @@ boxplot(ds$TAT, ylab = "TAT", horizontal = TRUE);boxplot(ds$TEY, ylab = "TEY", h
 boxplot(ds$CO, ylab = "CO", horizontal = TRUE);boxplot(ds$NOX, ylab = "NOX", horizontal = TRUE)
 
 #### ---- Correlation Matrix ---- ####
-# Si osserva la preseza di legami, anche forti tra i predittori stessi, e tra predittori e risposta
+# Si osserva la preseza di legami, anche forti tra i predittori stessi, e tra predittori e risposte
 # In particolare, come era intuibile, le due risposte sono legate a fattori meccanici della turbina
 # e non a quelli ambientali. 
-#Intuizione: I regressori relativi a variabili ambientali possono introdurre solo rumore
+# Intuizione #1: I regressori relativi a variabili ambientali possono introdurre rumore, degradazione della qualità della predizione
+# Intuizione #2: Eseguendo la regressione senza tener conto delle correlazioni, che esistono già a livello
+# di solo coppie di variabili, andiamo incontro al problema della collinearità (VIF elevato)
+# C0 è correlato a: AFDP, TIT, GTEP, TEY, CDP
+# NOX particolarmetnte correlato con AT ed in maniera minore con i predittori elencati sopra
 library(corrplot)
 library(RColorBrewer)
 cor <-cor(ds)
@@ -65,7 +70,25 @@ dev.new()
 corrplot(cor, type="upper", order="hclust",col=brewer.pal(n=8, name="RdYlBu"))
 
 #### ---- Scatter Plots ---- ####
-# Si osserva come 
+# Conferma dei ragionamenti di sopra.
+# Si osserva che tra la risposta e i regressori può esistere un qualche legame non strettamente lineare
 dev.new()
 pairs(ds)
+
+dev.new()
+plot(TIT, CO)
+dev.new()
+plot(GTEP, CO)
+dev.new()
+plot(TEY, CO)
+dev.new()
+plot(CDP, CO)
+
+x = c(1:nrow(ds))
+train = (nrow(ds)*70)/100
+validation = (nrow(ds)*30)/100
+
+train_set = sample(x, train, rep = FALSE)
+validation_set = sample(x[-train_set], validation, rep = FALSE)
+
 
