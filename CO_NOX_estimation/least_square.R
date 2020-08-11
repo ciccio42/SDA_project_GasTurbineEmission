@@ -49,6 +49,10 @@ dev.new()
 par(mfrow = c(2,2))
 plot(fit1)
 
+fit1.stderrors = rstandard(fit1)
+hist(fit1.stderrors)
+plot(density(fit1.stderrors))
+
 dev.new()
 # Osservando ancora i grafici a coppie dei soli predittori rilevanti
 # possiamo osservare come in realtà, la motivazione principale può essere data dalla presenza di relazioni non lineari
@@ -186,14 +190,29 @@ dev.new()
 plot(TIT, CO)
 #### ---- Linear only TIT ---- ####
 abline(fit_tit, col = "blue")
-matplot(xx, ci_pred_TIT$fit[,2],,lty=3,col="red",type="l",add = T)
-matplot(xx, ci_pred_TIT$fit[,3],,lty=3,col="red",type="l",add = T)
-matplot(xx, pi_pred_TIT[,2],,lty=3, col="green", type = "l", add = T)
-matplot(xx, pi_pred_TIT[,3],,lty=3, col="green", type = "l", add = T)
+matplot(xx, ci_pred_TIT$fit[,2],,lty=3,col="red",type="l",add = T, lwd = 3)
+matplot(xx, ci_pred_TIT$fit[,3],,lty=3,col="red",type="l",add = T, lwd = 3)
+matplot(xx, pi_pred_TIT[,2],,lty=3, col="green", type = "l", add = T, lwd = 3)
+matplot(xx, pi_pred_TIT[,3],,lty=3, col="green", type = "l", add = T, lwd = 3)
 
 #### ---- Linear TIT with others ---- ####
+dev.new()
+plot(TIT, CO)
+y <- predict(fit1, newdata = data.frame(TIT = x))
+lines(x, y, col = "red")
+ci_pred_TIT = predict(fit1, newdata = data.frame(TIT = xx), se.fit = T, interval = "confidence")
+pi_pred_TIT = predict(fit1, newdata = data.frame(TIT = xx), set.fit = T, interval = "prediction")
+matplot(xx, ci_pred_TIT$fit[,2],,lty=3,col="red",type="l",add = T, lwd = 1)
+matplot(xx, ci_pred_TIT$fit[,3],,lty=3,col="red",type="l",add = T, lwd = 1)
+matplot(xx, pi_pred_TIT[,2],,lty=3, col="green", type = "l", add = T, lwd = 1)
+matplot(xx, pi_pred_TIT[,3],,lty=3, col="green", type = "l", add = T, lwd = 1)
 
 #### ---- Poly 2 TIT only ---- ####
+# Si osserva come effettivamente con l'introduzione del polinomio
+# gli intervalli di predizione seguono di più l'andamento della curva dei dati
+# andando a restringere l'intervallo di predizione
+dev.new()
+plot(TIT, CO)
 y <- predict(fit_poly, newdata = data.frame(TIT = x))
 lines(x, y, col = "red")
 ci_pred_TIT_poly = predict(fit_poly, newdata = data.frame(TIT = xx), se.fit = T, interval = "confidence")
@@ -202,3 +221,46 @@ matplot(xx, ci_pred_TIT_poly$fit[,2],,lty=3,col="yellow",type="l",add = T, lwd =
 matplot(xx, ci_pred_TIT_poly$fit[,3],,lty=3,col="yellow",type="l",add = T, lwd = 3)
 matplot(xx, pi_pred_TIT_poly[,2],,lty=3, col="violet", type = "l", add = T, lwd = 3)
 matplot(xx, pi_pred_TIT_poly[,3],,lty=3, col="violet", type = "l", add = T, lwd = 3)
+
+#### ---- Poly 2 TIT with others ---- #### 
+# A dimostrazione del fatto che gli altri predittori risultano ininfluenti, osserviamo come
+# l'andamento del polinomio di grado 2 con la presenza degli altri predittori è praticamente irrilevante
+dev.new()
+plot(TIT, CO)
+y <- predict(fit1.poly2, newdata = data.frame(TIT = x))
+lines(x, y, col = "red")
+ci_pred_TIT_poly = predict(fit1.poly2, newdata = data.frame(TIT = xx), se.fit = T, interval = "confidence")
+pi_pred_TIT_poly = predict(fit1.poly2, newdata = data.frame(TIT = xx), set.fit = T, interval = "prediction")
+matplot(xx, ci_pred_TIT_poly$fit[,2],,lty=3,col="yellow",type="l",add = T, lwd = 1)
+matplot(xx, ci_pred_TIT_poly$fit[,3],,lty=3,col="yellow",type="l",add = T, lwd = 1)
+matplot(xx, pi_pred_TIT_poly[,2],,lty=3, col="violet", type = "l", add = T, lwd = 1)
+matplot(xx, pi_pred_TIT_poly[,3],,lty=3, col="violet", type = "l", add = T, lwd = 1)
+
+#### ---- Poly 3 TIT only ---- ####
+# Come volevasi dimostrare l'andamento con il polinomio di grado 3 è praticamente identico a quello di grado 2
+# all'interno della nuvola dei dati.
+dev.new()
+plot(TIT, CO)
+y <- predict(fit_poly_3, newdata = data.frame(TIT = x))
+lines(x, y, col = "red")
+ci_pred_TIT_poly = predict(fit_poly_3, newdata = data.frame(TIT = xx), se.fit = T, interval = "confidence")
+pi_pred_TIT_poly = predict(fit_poly_3, newdata = data.frame(TIT = xx), set.fit = T, interval = "prediction")
+matplot(xx, ci_pred_TIT_poly$fit[,2],,lty=3,col="yellow",type="l",add = T, lwd = 1)
+matplot(xx, ci_pred_TIT_poly$fit[,3],,lty=3,col="yellow",type="l",add = T, lwd = 1)
+matplot(xx, pi_pred_TIT_poly[,2],,lty=3, col="violet", type = "l", add = T, lwd = 1)
+matplot(xx, pi_pred_TIT_poly[,3],,lty=3, col="violet", type = "l", add = T, lwd = 1)
+
+
+#### ---- Poly 3 TIT with others ---- ####
+# Anche in questo caso la presenza degli altri regressori è praticamente inutile nella predizione 
+# di CO rispetto TIT
+dev.new()
+plot(TIT, CO)
+y <- predict(fit1.poly3, newdata = data.frame(TIT = x))
+lines(x, y, col = "red")
+ci_pred_TIT_poly = predict(fit1.poly3, newdata = data.frame(TIT = xx), se.fit = T, interval = "confidence")
+pi_pred_TIT_poly = predict(fit1.poly3, newdata = data.frame(TIT = xx), set.fit = T, interval = "prediction")
+matplot(xx, ci_pred_TIT_poly$fit[,2],,lty=3,col="yellow",type="l",add = T, lwd = 1)
+matplot(xx, ci_pred_TIT_poly$fit[,3],,lty=3,col="yellow",type="l",add = T, lwd = 1)
+matplot(xx, pi_pred_TIT_poly[,2],,lty=3, col="violet", type = "l", add = T, lwd = 1)
+matplot(xx, pi_pred_TIT_poly[,3],,lty=3, col="violet", type = "l", add = T, lwd = 1)
