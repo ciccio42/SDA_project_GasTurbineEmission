@@ -86,9 +86,8 @@ plot(CDP, CO)
 
 x = c(1:nrow(ds))
 train = (nrow(ds)*70)/100
-validation = (nrow(ds)*30)/100
+test = (nrow(ds)*30)/100
 
-train_set = sample(x, train, rep = FALSE)
-validation_set = sample(x[-train_set], validation, rep = FALSE)
-
-
+set.seed(1)
+training_set = sample(x, train, rep = FALSE)
+test_set = sample(x[-train_set], validation, rep = FALSE)
