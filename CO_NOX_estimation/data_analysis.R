@@ -94,3 +94,9 @@ test = (nrow(ds)*30)/100
 set.seed(1)
 train_set = sample(x, train, rep = FALSE)
 test_set = sample(x[-train_set], test, rep = FALSE)
+
+ds_train = ds[train_set, ]
+ds_test = ds[test_set, ]
+
+write.csv(ds_train, "ds_train.csv", row.names = FALSE)
+write.csv(ds_test, "ds_test.csv", row.names = FALSE)
