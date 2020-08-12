@@ -89,5 +89,5 @@ train = (nrow(ds)*70)/100
 test = (nrow(ds)*30)/100
 
 set.seed(1)
-training_set = sample(x, train, rep = FALSE)
-test_set = sample(x[-train_set], validation, rep = FALSE)
+train_set = sample(x, train, rep = FALSE)
+test_set = sample(x[-train_set], test, rep = FALSE)
