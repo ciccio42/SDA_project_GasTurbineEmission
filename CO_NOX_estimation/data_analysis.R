@@ -10,6 +10,9 @@ ds = rbind(ds, ds3)
 ds = rbind(ds, ds4)
 ds = rbind(ds, ds5)
 
+
+write.csv(ds,"dataset.csv", row.names = FALSE)
+
 attach(ds)
 #### --- Features list ---- ####
 # Predictors: 
