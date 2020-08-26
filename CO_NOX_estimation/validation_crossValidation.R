@@ -1,5 +1,9 @@
 #### ---- Library ---- ####
 library(boot)
+ds = read.csv("dataset.csv")
+ds_train = read.csv("ds_train.csv")
+ds_test = read.csv("ds_test.csv")
+attach(ds_train)
 #### ---- Validation, Cross Validation ---- ####
 # Dal file least_square abbiamo prodotto 4 modelli: fit_all, fit1, fit_poly, fit1.poly2, fit1.poly3
 # I quali sono stati ottenuti da una prima analisi basata su intuizioni.
@@ -86,17 +90,17 @@ for(i in 2:10){
 # fit_all, fit1, fit_poly, fit1.poly2, fit1.poly3
 # Si osserva che effettivamente l'introduzione della relazione non lineare 
 # effettivamente comporta dei miglioramenti.
-summary(fit_all)
-glm_fit_all = glm(formula = CO~.-NOX, data = ds) 
-fit_all_cv = cv.glm(ds, glm_fit_all, K = 10)$delta[1] # 2.23
+glm_fit_all = glm(formula = CO~., data = ds_train) 
+fit_all_cv = cv.glm(ds_train, glm_fit_all, K = 10)$delta[1] #  2.244833
+mean((predict(glm_fit_all, ds_test)-ds_test[,"CO"])^2) # 2.220337
 
-glm_fit1 = glm(formula = CO~.-NOX-TEY-CDP-GTEP, data = ds) 
-fit_1_cv = cv.glm(ds, glm_fit1, K = 10)$delta[1] # 2.27
+glm_fit1 = glm(formula = CO~.-TEY-CDP-GTEP, data = ds_train) 
+fit_1_cv = cv.glm(ds_train, glm_fit1, K = 10)$delta[1] # 2.281462
 
-glm_fit_poly = glm(formula = CO~poly(TIT,2), data = ds) 
-fit_poly_cv = cv.glm(ds, glm_fit_poly, K = 10)$delta[1] # 2.021183
+glm_fit_poly = glm(formula = CO~poly(TIT,2), data = ds_train) 
+fit_poly_cv = cv.glm(ds_train, glm_fit_poly, K = 10)$delta[1] # 2.031061
 
-glm_fit1_poly3 = glm(formula = CO~.-NOX-TEY-CDP-GTEP-TIT+poly(TIT, 3), data = ds) 
-fit1_poly3_cv = cv.glm(ds, glm_fit1_poly3, K = 10)$delta[1] # 1.958076
+glm_fit1_poly3 = glm(formula = CO~.-TEY-CDP-GTEP-TIT+poly(TIT, 3), data = ds_train) 
+fit1_poly3_cv = cv.glm(ds_train, glm_fit1_poly3, K = 10)$delta[1] # 1.970951
 
 

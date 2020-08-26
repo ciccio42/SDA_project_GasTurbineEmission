@@ -95,8 +95,13 @@ set.seed(1)
 train_set = sample(x, train, rep = FALSE)
 test_set = sample(x[-train_set], test, rep = FALSE)
 
-ds_train = ds[train_set, ]
+
+ds_train = ds[train_set,]
+ds_train = subset(ds_train, select = -c(NOX))
 ds_test = ds[test_set, ]
+ds_test = subset(ds_test, select = -c(NOX))
+
 
 write.csv(ds_train, "ds_train.csv", row.names = FALSE)
 write.csv(ds_test, "ds_test.csv", row.names = FALSE)
+

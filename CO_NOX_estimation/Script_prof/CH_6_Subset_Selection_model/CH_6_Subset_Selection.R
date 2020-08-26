@@ -351,6 +351,7 @@ set.seed(1)
 # Osserviamo come adesso abbiamo indicato gli indici del set da prelevare, che sono quelli 
 # nel vettore train
 pcr.fit = pcr(Salary~., data = Hitters, subset = train, scale = TRUE, validation = "CV")
+summary(pcr.fit)
 dev.new()
 validationplot(pcr.fit, val.type = "MSEP", legendpos = "topright")
 minPCR = which.min(MSEP(pcr.fit)$val[1,,][-1])

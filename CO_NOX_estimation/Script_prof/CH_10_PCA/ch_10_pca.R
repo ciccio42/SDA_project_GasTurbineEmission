@@ -38,7 +38,7 @@ biplot(pr.out, scale=0)
 pr.out$sdev
 pr.var=pr.out$sdev^2; pr.var # variance
 # To compute the proportion of variance explained (PVE) by each principal component, we divide the variance explained by each principal component by the total variance explained by all four principal components:
-pve=pr.var/sum(pr.var); pve
+pve=pr.var/sum(pr.var); sum(pve)
 # We see that the first principal component explains 62.0% of the variance in the data, the next principal component explains 24.7% of the variance, and so forth.
 
 # We can plot the PVE explained by each component, as well as the cumulative PVE, as follows:
